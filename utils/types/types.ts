@@ -4,3 +4,12 @@ export interface MapGeoBoundsInterface {
     swLat: number,
     swLng: number
 }
+
+export interface APIRestaurantsDataInterface {
+    lat: string,
+    lon: string,
+    tags: {
+        amenity: string,
+        name: string
+    }
+}
