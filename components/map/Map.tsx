@@ -41,23 +41,34 @@ function Map() {
       const onUnmount = React.useCallback(function callback(map: google.maps.Map) {
         setMap(null)
       }, [])
-      
-      const handleBoundsChanged = () => {
-        if (mapRef.current) {
-          const bounds = mapRef.current.getBounds();
-          if (bounds) {
-            const norteast = bounds.getNorthEast();
-            const southwest = bounds.getSouthWest();
+        
+      const handleBoundsChanged = React.useCallback(() => {
+        let timeoutResize;
+        clearTimeout(timeoutResize);
+        
+        timeoutResize = setTimeout(() => {
+            if (mapRef.current) {
+            const bounds = mapRef.current.getBounds();
+            console.log("Bounds Changed");
+            if (bounds) {
+                console.log("########PASSOUUU");
+                const norteast = bounds.getNorthEast();
+                const southwest = bounds.getSouthWest();
 
-            const neLat = norteast.lat();
-            const neLng = norteast.lng();
-            const swLat = southwest.lat();
-            const swLng = southwest.lng();
+                const neLat = norteast.lat();
+                const neLng = norteast.lng();
+                const swLat = southwest.lat();
+                const swLng = southwest.lng();
 
-            setMapBounds({neLat, neLng, swLat, swLng });
-            /* setRefetchList(true); */
-            /* console.log("Map Bounds:", { neLat, neLng, swLat, swLng }); */
-          }
+                setMapBounds({neLat, neLng, swLat, swLng });
+                console.log("---refetchList-------", refetchList);
+                if(!refetchList) {
+                  setRefetchList(true);              
+                }     
+            }
+          };  
+        }, 500);
+      }, [refetchList, mapRef]);
         }
       };
       
