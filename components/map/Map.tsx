@@ -15,10 +15,31 @@ const containerStyle = {
     lng: -46.63220789819972
   };
 
-function Map() {
-    
-    const [mapBounds, setMapBounds] = useAtom(mapGeoBounds);
-    const [refecthList, setRefetchList] = useAtom(refecthNearbyList);
+  function Map() {
+      
+      const [, setMapBounds] = useAtom(mapGeoBounds);
+      const [refetchList, setRefetchList] = useAtom(refecthNearbyList);
+      const [restaurantsData] = useAtom(restaurantsAPIData);
+      const [usersLocation, setUsersLocation] = useState<google.maps.LatLng | google.maps.LatLngLiteral>();
+
+      /* Pega localização do usuário */
+      useEffect(() => {
+        const success = (pos:any) => {
+          const coord = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          }
+          setUsersLocation(coord);
+        }
+        const error = () => {
+          console.log("error", error)
+        }
+        navigator.geolocation.getCurrentPosition(success, error);
+      }, [])
+
+      useEffect(() => {
+          console.log(restaurantsData)
+      }, [restaurantsData])
 
     const GOOGLE_MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
     const { isLoaded } = useJsApiLoader({
