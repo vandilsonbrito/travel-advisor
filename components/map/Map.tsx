@@ -69,6 +69,13 @@ function Map() {
           };  
         }, 500);
       }, [refetchList, mapRef]);
+
+      useEffect(() => {
+        if (refetchList) {
+          const timeoutSetRefetch = setTimeout(() => {
+            setRefetchList(false);
+          }, 500);
+          return () => clearTimeout(timeoutSetRefetch);
         }
       };
       
